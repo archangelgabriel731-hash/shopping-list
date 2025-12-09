@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Список покупок">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Удобный менеджер списка покупок с напоминаниями">
+    
+    <!-- Manifest для PWA -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCh0L/QuNGB0L7QuiDQv9C+0LrRg9C/0L7QuiIsCiAgInNob3J0X25hbWUiOiAi0KHQv9C40YHQvtC6IiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmZmZmZmYiLAogICJ0aGVtZV9jb2xvciI6ICIjNjY3ZWVhIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGRwWkhSb1BTSXhPVElpSUdobGFXZG9kRDBpTVRreUlqNDhjbVZqZENCM2FXUjBhRDBpTVRreUlpQm9aV2xuYUhROUlqRTVNaUlnY25nOUlqRXdJaUJtYVd4c1BTSWpOall4WldWaElpOCtQSFJsZUhRZ2VEMGlPVFlpSUhrOUlqazJJaUJtYjI1MExYTnBlbVU5SWpZd0lpQm1hV3hzUFNJamRtWnpkeUkrOEorVW1Ed3ZkR1Y0ZEQ0OEwzTjJaejQ9IiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGRwWkhSb1BTSTFNVElpSUdobGFXZG9kRDBpTlRFeUlqNDhjbVZqZENCM2FXUjBhRDBpTlRFeUlpQm9aV2xuYUhROUlqVXhNaUlnY25nOUlqSTFJaUJtYVd4c1BTSWpOall4WldWaElpOCtQSFJsZUhRZ2VEMGlNalUySWlCNVBTSXlOVFlpSUdadmJuUXRjMmw2WlQwaU1UWXdJaUJtYVd4c1BTSWpkbVp6ZHlJK2ZLU1VtRHd2ZEdWNGRENDhMM04yWno0PSIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+    
+    <title>📋 Менеджер списка покупок</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        /* Стили для поиска и фильтров */
+        .search-filter-section {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #ffc107;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding-left: 45px;
+            background: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .filter-btn:hover {
+            border-color: #667eea;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .search-results-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            text-align: center;
+            color: #1976d2;
+            font-weight: 600;
+        }
+
+        .shopping-list {
+            margin-top: 20px;
+        }
+
+        .list-item {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .list-item:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .list-item.highlight {
+            border-color: #ffc107;
+            background: #fffbf0;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .item-details {
+            display: flex;
+            gap: 15px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .item-category {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 12px;
+            font-size: 0.85em;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #95a5a6;
+        }
+
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+
+        .price-input {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff3cd;
+            border-radius: 10px;
+            border: 2px solid #ffc107;
+        }
+
+        .price-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .price-item label {
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .price-item input {
+            width: 120px;
+        }
+
+        .total-price {
+            margin-top: 15px;
+            padding: 15px;
+            background: #28a745;
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        /* ========== ТЁМНАЯ ТЕМА ========== */
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border-radius: 50px;
+            padding: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .theme-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            transition: all 0.3s;
+        }
+
+        .theme-icon.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Стили для тёмной темы */
+        body.dark-theme {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body.dark-theme .container {
+            background: #0f3460;
+            color: #e8e8e8;
+        }
+
+        body.dark-theme .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body.dark-theme .input-section {
+            background: #16213e;
+            border: 1px solid #2d4263;
+        }
+
+        body.dark-theme input,
+        body.dark-theme select {
+            background: #1a1a2e;
+            color: #e8e8e8;
+            border-color: #2d4263;
+        }
+
+        body.dark-theme input:focus,
+        body.dark-theme select:focus {
+            border-color: #667eea;
+        }
+
+        body.dark-theme .search-filter-section {
+            background: #16213e;
+            border-color: #ffc107;
+        }
+
+        body.dark-theme .search-box input {
+            background: #1a1a2e;
+        }
+
+        body.dark-theme .filter-btn {
+            background: #1a1a2e;
+            color: #e8e8e8;
+            border-color: #2d4263;
+        }
+
+        body.dark-theme .filter-btn:hover {
+            border-color: #667eea;
+        }
+
+        body.dark-theme .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        body.dark-theme .search-results-info {
+            background: #1a1a2e;
+            color: #64b5f6;
+            border: 1px solid #2d4263;
+        }
+
+        body.dark-theme .list-item {
+            background: #16213e;
+            border-color: #2d4263;
+        }
+
+        body.dark-theme .list-item:hover {
+            border-color: #667eea;
+        }
+
+        body.dark-theme .list-item.highlight {
+            border-color: #ffc107;
+            background: #2d3748;
+        }
+
+        body.dark-theme .item-name {
+            color: #e8e8e8;
+        }
+
+        body.dark-theme .item-details {
+            color: #b0b0b0;
+        }
+
+        body.dark-theme .item-category {
+            background: #1a1a2e;
+            color: #64b5f6;
+        }
+
+        body.dark-theme .empty-state {
+            color: #7f8c8d;
+        }
+
+        body.dark-theme .price-input {
+            background: #16213e;
+            border-color: #ffc107;
+        }
+
+        body.dark-theme .price-item input {
+            background: #1a1a2e;
+        }
+
+        body.dark-theme .theme-toggle {
+            background: #16213e;
+            border: 2px solid #2d4263;
+        }
+
+        body.dark-theme h2 {
+            color: #e8e8e8;
+        }
+
+        /* Стили для режима редактирования */
+        .list-item.editing {
+            background: #fff3cd;
+            border-color: #ffc107;
+            border-width: 3px;
+        }
+
+        body.dark-theme .list-item.editing {
+            background: #3d3520;
+            border-color: #ffc107;
+        }
+
+        .edit-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .edit-form input,
+        .edit-form select {
+            padding: 8px 12px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .edit-form input[type="text"] {
+            flex: 2;
+            min-width: 150px;
+        }
+
+        .edit-form input[type="number"] {
+            width: 100px;
+        }
+
+        .edit-form select {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        /* Стили для напоминаний */
+        .reminder-badge {
+            display: inline-block;
+            background: #ff9800;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-left: 8px;
+            font-weight: 600;
+        }
+
+        .reminder-icon {
+            font-size: 0.9em;
+        }
+
+        .notification-permission {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        body.dark-theme .notification-permission {
+            background: #3d3520;
+            border-color: #ffc107;
+        }
+
+        .notification-permission .icon {
+            font-size: 2em;
+        }
+
+        .notification-permission .content {
+            flex: 1;
+        }
+
+        .notification-permission strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        body.dark-theme .notification-permission strong {
+            color: #e8e8e8;
+        }
+
+        .notification-permission p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        body.dark-theme .notification-permission p {
+            color: #b0b0b0;
+        }
+
+        /* PWA Стили */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            align-items: center;
+            gap: 15px;
+            z-index: 2000;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                bottom: -100px;
+                opacity: 0;
+            }
+            to {
+                bottom: 20px;
+                opacity: 1;
+            }
+        }
+
+        .install-prompt.show {
+            display: flex;
+        }
+
+        .install-prompt .icon {
+            font-size: 2em;
+        }
+
+        .install-prompt .content {
+            flex: 1;
+        }
+
+        .install-prompt strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .install-prompt p {
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .install-prompt button {
+            background: white;
+            color: #667eea;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .install-prompt button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+        }
+
+        .install-prompt .close-btn {
+            background: transparent;
+            color: white;
+            padding: 5px 10px;
+            font-size: 1.2em;
+        }
+
+        .pwa-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .pwa-info.show {
+            display: block;
+        }
+
+        .pwa-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .pwa-info p {
+            margin: 5px 0;
+            font-size: 0.95em;
+            opacity: 0.95;
+        }
+
+        .pwa-info button {
+            margin-top: 10px;
+            background: white;
+            color: #667eea;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .reminder-section {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        body.dark-theme .reminder-section {
+            background: #1a2e1a;
+            border-color: #4caf50;
+        }
+
+        .reminder-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .reminder-controls input[type="datetime-local"] {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .btn-reminder {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-reminder:hover {
+            background: #45a049;
+        }
+
+        .btn-cancel-reminder {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-cancel-reminder:hover {
+            background: #f57c00;
+        }
+    </style>
+</head>
+<body>
+    <!-- PWA Install Prompt -->
+    <div class="install-prompt" id="installPrompt">
+        <div class="icon">📱</div>
+        <div class="content">
+            <strong>Установить приложение</strong>
+            <p>Добавьте на главный экран для быстрого доступа</p>
+        </div>
+        <button onclick="installPWA()">Установить</button>
+        <button class="close-btn" onclick="closeInstallPrompt()">✖️</button>
+    </div>
+
+    <!-- Переключатель темы -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <div class="theme-icon" id="lightIcon">☀️</div>
+        <div class="theme-icon" id="darkIcon">🌙</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>📋 Менеджер списка покупок</h1>
+            <p>Организуйте свои покупки легко и красиво</p>
+        </div>
+
+        <div class="content">
+            <!-- PWA Информация -->
+            <div class="pwa-info" id="pwaInfo">
+                <h3>📱 Установите приложение на телефон!</h3>
+                <p><strong>Android Chrome:</strong> Меню (⋮) → "Установить приложение" или "Добавить на главный экран"</p>
+                <p><strong>iOS Safari:</strong> Поделиться (📤) → "На экран «Домой»"</p>
+                <p><strong>Компьютер:</strong> Кнопка "Установить" в адресной строке</p>
+                <button onclick="document.getElementById('pwaInfo').classList.remove('show')">Понятно</button>
+            </div>
+
+            <!-- Уведомление о разрешении на уведомления -->
+            <div id="notificationPermission" style="display: none;" class="notification-permission">
+                <div class="icon">🔔</div>
+                <div class="content">
+                    <strong>Включите уведомления</strong>
+                    <p>Разрешите уведомления, чтобы получать напоминания о покупках</p>
+                </div>
+                <button class="btn-primary" onclick="requestNotificationPermission()">
+                    Включить
+                </button>
+            </div>
+
+            <!-- Форма добавления товара -->
+            <div class="input-section">
+                <h2 style="margin-bottom: 15px; color: #2c3e50;">➕ Добавить товар</h2>
+                <div class="input-group">
+                    <input type="text" id="productName" placeholder="Название товара" />
+                    <input type="number" id="productQuantity" placeholder="Количество" min="1" value="1" />
+                    <select id="productCategory">
+                        <option value="Продукты">🍎 Продукты</option>
+                        <option value="Напитки">🥤 Напитки</option>
+                        <option value="Бытовая химия">🧴 Бытовая химия</option>
+                        <option value="Гигиена">🧼 Гигиена</option>
+                        <option value="Другое">📦 Другое</option>
+                    </select>
+                    <button class="btn-primary" onclick="addProduct()">Добавить</button>
+                </div>
+                <div style="margin-top: 10px;">
+                    <label for="importFile" class="btn-primary" style="display: inline-block; cursor: pointer;">
+                        📥 Импорт JSON
+                    </label>
+                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importFromJSON(event)" />
+                </div>
+            </div>
+
+            <!-- Поиск и фильтры -->
+            <div class="search-filter-section">
+                <h2 style="margin-bottom: 15px; color: #2c3e50;">🔍 Поиск, фильтры и сортировка</h2>
+                
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Поиск товара по названию..." oninput="applyFilters()" />
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <strong style="display: block; margin-bottom: 8px; color: #2c3e50;">Фильтр по категории:</strong>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterByCategory('Все')" data-category="Все">
+                            🛒 Все товары
+                        </button>
+                        <button class="filter-btn" onclick="filterByCategory('Продукты')" data-category="Продукты">
+                            🍎 Продукты
+                        </button>
+                        <button class="filter-btn" onclick="filterByCategory('Напитки')" data-category="Напитки">
+                            🥤 Напитки
+                        </button>
+                        <button class="filter-btn" onclick="filterByCategory('Бытовая химия')" data-category="Бытовая химия">
+                            🧴 Бытовая химия
+                        </button>
+                        <button class="filter-btn" onclick="filterByCategory('Гигиена')" data-category="Гигиена">
+                            🧼 Гигиена
+                        </button>
+                        <button class="filter-btn" onclick="filterByCategory('Другое')" data-category="Другое">
+                            📦 Другое
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <strong style="display: block; margin-bottom: 8px; color: #2c3e50;">Сортировка:</strong>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="sortBy('default')" data-sort="default">
+                            📋 По добавлению
+                        </button>
+                        <button class="filter-btn" onclick="sortBy('name-asc')" data-sort="name-asc">
+                            🔤 По имени (А→Я)
+                        </button>
+                        <button class="filter-btn" onclick="sortBy('name-desc')" data-sort="name-desc">
+                            🔤 По имени (Я→А)
+                        </button>
+                        <button class="filter-btn" onclick="sortBy('quantity-asc')" data-sort="quantity-asc">
+                            📊 По количеству (↑)
+                        </button>
+                        <button class="filter-btn" onclick="sortBy('quantity-desc')" data-sort="quantity-desc">
+                            📊 По количеству (↓)
+                        </button>
+                        <button class="filter-btn" onclick="sortBy('category')" data-sort="category">
+                            🏷️ По категории
+                        </button>
+                    </div>
+                </div>
+
+                <div id="searchResults" class="search-results-info" style="display: none;"></div>
+            </div>
+
+            <!-- Список покупок -->
+            <div class="shopping-list">
+                <h2 style="margin-bottom: 15px; color: #2c3e50;">🛒 Ваш список покупок</h2>
+                <div id="listContainer"></div>
+            </div>
+
+            <!-- Статистика -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalItems">0</div>
+                    <div class="stat-label">Товаров в списке</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalQuantity">0</div>
+                    <div class="stat-label">Всего единиц</div>
+                </div>
+            </div>
+
+            <!-- Кнопки экспорта -->
+            <div id="exportSection" style="display: none; margin-top: 20px;">
+                <div class="input-section">
+                    <h2 style="margin-bottom: 15px; color: #2c3e50;">📤 Экспорт и управление</h2>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn-primary" onclick="exportAsText()">
+                            📄 Скачать как TXT
+                        </button>
+                        <button class="btn-primary" onclick="exportAsJSON()">
+                            💾 Скачать как JSON
+                        </button>
+                        <button class="btn-primary" onclick="copyToClipboard()">
+                            📋 Скопировать
+                        </button>
+                        <button class="btn-primary" onclick="printList()">
+                            🖨️ Распечатать
+                        </button>
+                        <button class="btn-danger" onclick="clearStorage()" style="margin-left: auto;">
+                            🗑️ Очистить всё
+                        </button>
+                    </div>
+                    <div style="margin-top: 15px; padding: 12px; background: #e8f5e9; border-radius: 8px; border-left: 4px solid #4caf50;">
+                        <strong>💾 Автосохранение активно</strong> — все изменения сохраняются автоматически
+                    </div>
+                </div>
+            </div>
+
+            <!-- Калькулятор стоимости -->
+            <div id="priceCalculator" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // ========== PWA ФУНКЦИИ ==========
+        
+        let deferredPrompt;
+        let isInstalled = false;
+
+        // Проверяем, установлено ли приложение
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            isInstalled = true;
+            console.log('✅ Приложение установлено как PWA');
+        }
+
+        // Перехватываем событие установки
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Показываем наш кастомный промпт через 3 секунды
+            setTimeout(() => {
+                if (!isInstalled) {
+                    document.getElementById('installPrompt').classList.add('show');
+                }
+            }, 3000);
+        });
+
+        // Функция установки PWA
+        async function installPWA() {
+            if (!deferredPrompt) {
+                // Если браузер не поддерживает автоустановку, показываем инструкции
+                document.getElementById('pwaInfo').classList.add('show');
+                closeInstallPrompt();
+                return;
+            }
+
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                console.log('✅ Пользователь установил PWA');
+                closeInstallPrompt();
+            } else {
+                console.log('❌ Пользователь отклонил установку');
+            }
+            
+            deferredPrompt = null;
+        }
+
+        function closeInstallPrompt() {
+            document.getElementById('installPrompt').classList.remove('show');
+        }
+
+        // Отслеживаем успешную установку
+        window.addEventListener('appinstalled', () => {
+            console.log('✅ PWA успешно установлено!');
+            isInstalled = true;
+            closeInstallPrompt();
+        });
+
+        // Регистрируем Service Worker для офлайн работы
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Service Worker код встроен inline для простоты
+                const swCode = `
+                    const CACHE_NAME = 'shopping-list-v1';
+                    
+                    self.addEventListener('install', (event) => {
+                        console.log('Service Worker установлен');
+                        self.skipWaiting();
+                    });
+                    
+                    self.addEventListener('activate', (event) => {
+                        console.log('Service Worker активирован');
+                        event.waitUntil(clients.claim());
+                    });
+                    
+                    self.addEventListener('fetch', (event) => {
+                        // Кэширование для офлайн работы (опционально)
+                    });
+                `;
+                
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(reg => console.log('✅ Service Worker зарегистрирован'))
+                    .catch(err => console.log('❌ Ошибка Service Worker:', err));
+            });
+        }
+
+        // ========== ЛОКАЛЬНОЕ ХРАНИЛИЩЕ ==========
+        
+        const STORAGE_KEY = 'shoppingList';
+        const THEME_KEY = 'theme';
+        const REMINDERS_KEY = 'reminders';
+        
+        // Загружаем данные из localStorage при запуске
+        let shoppingList = loadFromStorage();
+        let currentFilter = 'Все';
+        let currentSort = 'default';
+        let reminders = loadReminders();
+        let reminderCheckInterval = null;
+        
+        // Загружаем тему
+        function loadTheme() {
+            const savedTheme = localStorage.getItem(THEME_KEY);
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                updateThemeIcons();
+            }
+        }
+        
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+            updateThemeIcons();
+        }
+        
+        function updateThemeIcons() {
+            const isDark = document.body.classList.contains('dark-theme');
+            const lightIcon = document.getElementById('lightIcon');
+            const darkIcon = document.getElementById('darkIcon');
+            
+            if (isDark) {
+                lightIcon.classList.remove('active');
+                darkIcon.classList.add('active');
+            } else {
+                lightIcon.classList.add('active');
+                darkIcon.classList.remove('active');
+            }
+        }
+        
+        function loadFromStorage() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    console.log('✅ Загружено из памяти:', data.length, 'товаров');
+                    return data;
+                }
+            } catch (error) {
+                console.error('❌ Ошибка загрузки:', error);
+            }
+            return [];
+        }
+        
+        function loadReminders() {
+            try {
+                const saved = localStorage.getItem(REMINDERS_KEY);
+                if (saved) {
+                    return JSON.parse(saved);
+                }
+            } catch (error) {
+                console.error('❌ Ошибка загрузки напоминаний:', error);
+            }
+            return {};
+        }
+        
+        function saveReminders() {
+            try {
+                localStorage.setItem(REMINDERS_KEY, JSON.stringify(reminders));
+            } catch (error) {
+                console.error('❌ Ошибка сохранения напоминаний:', error);
+            }
+        }
+        
+        function saveToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(shoppingList));
+                console.log('💾 Сохранено:', shoppingList.length, 'товаров');
+            } catch (error) {
+                console.error('❌ Ошибка сохранения:', error);
+                alert('⚠️ Не удалось сохранить данные!');
+            }
+        }
+        
+        function clearStorage() {
+            if (confirm('🗑️ Вы уверены, что хотите удалить ВСЕ товары из списка?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                shoppingList = [];
+                renderList();
+                alert('✅ Список очищен!');
+            }
+        }
+
+        function addProduct() {
+            const nameInput = document.getElementById('productName');
+            const quantityInput = document.getElementById('productQuantity');
+            const categorySelect = document.getElementById('productCategory');
+            
+            const name = nameInput.value.trim();
+            const quantity = parseInt(quantityInput.value);
+            const category = categorySelect.value;
+
+            if (!name) {
+                alert('⚠️ Введите название товара!');
+                return;
+            }
+
+            if (quantity <= 0 || isNaN(quantity)) {
+                alert('⚠️ Введите корректное количество!');
+                return;
+            }
+
+            shoppingList.push({
+                id: Date.now(),
+                name: name,
+                quantity: quantity,
+                category: category
+            });
+
+            nameInput.value = '';
+            quantityInput.value = '1';
+            nameInput.focus();
+
+            saveToStorage();  // Сохраняем после добавления
+            renderList();
+        }
+
+        function deleteProduct(id) {
+            if (confirm('🗑️ Удалить этот товар?')) {
+                shoppingList = shoppingList.filter(item => item.id !== id);
+                saveToStorage();  // Сохраняем после удаления
+                renderList();
+            }
+        }
+
+        function startEdit(id) {
+            // Отменяем другие редактирования
+            document.querySelectorAll('.list-item').forEach(item => {
+                item.classList.remove('editing');
+            });
+
+            // Находим товар
+            const item = shoppingList.find(p => p.id === id);
+            if (!item) return;
+
+            // Находим элемент в DOM
+            const itemElement = document.querySelector(`[data-item-id="${id}"]`);
+            if (!itemElement) return;
+
+            // Добавляем класс редактирования
+            itemElement.classList.add('editing');
+
+            // Создаём форму редактирования
+            const editForm = document.createElement('div');
+            editForm.className = 'edit-form';
+            editForm.innerHTML = `
+                <input type="text" id="edit-name-${id}" value="${item.name}" placeholder="Название" />
+                <input type="number" id="edit-quantity-${id}" value="${item.quantity}" min="1" placeholder="Кол-во" />
+                <select id="edit-category-${id}">
+                    <option value="Продукты" ${item.category === 'Продукты' ? 'selected' : ''}>🍎 Продукты</option>
+                    <option value="Напитки" ${item.category === 'Напитки' ? 'selected' : ''}>🥤 Напитки</option>
+                    <option value="Бытовая химия" ${item.category === 'Бытовая химия' ? 'selected' : ''}>🧴 Бытовая химия</option>
+                    <option value="Гигиена" ${item.category === 'Гигиена' ? 'selected' : ''}>🧼 Гигиена</option>
+                    <option value="Другое" ${item.category === 'Другое' ? 'selected' : ''}>📦 Другое</option>
+                </select>
+                <button class="btn-primary btn-small" onclick="saveEdit(${id})">💾 Сохранить</button>
+                <button class="btn-danger btn-small" onclick="cancelEdit(${id})">❌ Отмена</button>
+            `;
+
+            // Добавляем форму в элемент
+            itemElement.appendChild(editForm);
+
+            // Фокус на поле имени
+            document.getElementById(`edit-name-${id}`).focus();
+        }
+
+        function saveEdit(id) {
+            const newName = document.getElementById(`edit-name-${id}`).value.trim();
+            const newQuantity = parseInt(document.getElementById(`edit-quantity-${id}`).value);
+            const newCategory = document.getElementById(`edit-category-${id}`).value;
+
+            // Валидация
+            if (!newName) {
+                alert('⚠️ Введите название товара!');
+                return;
+            }
+
+            if (newQuantity <= 0 || isNaN(newQuantity)) {
+                alert('⚠️ Введите корректное количество!');
+                return;
+            }
+
+            // Находим и обновляем товар
+            const item = shoppingList.find(p => p.id === id);
+            if (item) {
+                item.name = newName;
+                item.quantity = newQuantity;
+                item.category = newCategory;
+
+                saveToStorage();
+                applyFilters(); // Перерисовываем с текущими фильтрами
+            }
+        }
+
+        function cancelEdit(id) {
+            applyFilters(); // Просто перерисовываем, отменяя редактирование
+        }
+
+        // ========== СИСТЕМА НАПОМИНАНИЙ ==========
+
+        function checkNotificationPermission() {
+            if (!("Notification" in window)) {
+                return 'not-supported';
+            }
+            return Notification.permission;
+        }
+
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                alert('❌ Ваш браузер не поддерживает уведомления');
+                return;
+            }
+
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    alert('✅ Уведомления включены!');
+                    document.getElementById('notificationPermission').style.display = 'none';
+                    
+                    // Показываем тестовое уведомление
+                    new Notification('🔔 Уведомления включены!', {
+                        body: 'Теперь вы будете получать напоминания о покупках',
+                        icon: '🛒'
+                    });
+                } else {
+                    alert('❌ Вы отклонили разрешение на уведомления');
+                }
+            });
+        }
+
+        function setReminder(itemId) {
+            const item = shoppingList.find(p => p.id === itemId);
+            if (!item) return;
+
+            const permission = checkNotificationPermission();
+            
+            if (permission === 'denied') {
+                alert('❌ Уведомления заблокированы. Разрешите их в настройках браузера.');
+                return;
+            }
+
+            if (permission === 'default') {
+                requestNotificationPermission();
+                return;
+            }
+
+            // Показываем форму установки напоминания
+            const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
+            if (!itemElement) return;
+
+            // Проверяем, есть ли уже секция напоминаний
+            let reminderSection = itemElement.querySelector('.reminder-section');
+            
+            if (!reminderSection) {
+                reminderSection = document.createElement('div');
+                reminderSection.className = 'reminder-section';
+                
+                // Устанавливаем минимальную дату (текущее время)
+                const now = new Date();
+                const minDateTime = new Date(now.getTime() + 60000); // +1 минута от текущего времени
+                const minDateTimeString = minDateTime.toISOString().slice(0, 16);
+                
+                reminderSection.innerHTML = `
+                    <strong>🔔 Установить напоминание</strong>
+                    <div class="reminder-controls">
+                        <input type="datetime-local" id="reminder-time-${itemId}" min="${minDateTimeString}" />
+                        <button class="btn-primary btn-reminder btn-small" onclick="saveReminder(${itemId})">
+                            ✅ Установить
+                        </button>
+                        <button class="btn-danger btn-small" onclick="closeReminderForm(${itemId})">
+                            ❌ Отмена
+                        </button>
+                    </div>
+                `;
+                
+                itemElement.appendChild(reminderSection);
+            }
+        }
+
+        function saveReminder(itemId) {
+            const timeInput = document.getElementById(`reminder-time-${itemId}`);
+            const reminderTime = new Date(timeInput.value);
+            const now = new Date();
+
+            if (!timeInput.value) {
+                alert('⚠️ Выберите дату и время напоминания');
+                return;
+            }
+
+            if (reminderTime <= now) {
+                alert('⚠️ Напоминание должно быть в будущем');
+                return;
+            }
+
+            // Сохраняем напоминание
+            reminders[itemId] = {
+                time: reminderTime.toISOString(),
+                itemId: itemId
+            };
+            
+            saveReminders();
+            applyFilters();
+
+            const item = shoppingList.find(p => p.id === itemId);
+            const timeStr = reminderTime.toLocaleString('ru-RU');
+            alert(`✅ Напоминание установлено!\n"${item.name}"\nВремя: ${timeStr}`);
+        }
+
+        function cancelReminder(itemId) {
+            if (confirm('🗑️ Отменить напоминание?')) {
+                delete reminders[itemId];
+                saveReminders();
+                applyFilters();
+            }
+        }
+
+        function closeReminderForm(itemId) {
+            const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
+            const reminderSection = itemElement?.querySelector('.reminder-section');
+            if (reminderSection) {
+                reminderSection.remove();
+            }
+        }
+
+        function checkReminders() {
+            const now = new Date();
+            
+            Object.keys(reminders).forEach(itemId => {
+                const reminder = reminders[itemId];
+                const reminderTime = new Date(reminder.time);
+                
+                // Проверяем, пришло ли время напоминания
+                if (now >= reminderTime) {
+                    const item = shoppingList.find(p => p.id == itemId);
+                    
+                    if (item) {
+                        // Показываем уведомление
+                        if (Notification.permission === 'granted') {
+                            new Notification('🛒 Напоминание о покупках!', {
+                                body: `Не забудьте купить: ${item.name} (${item.quantity} шт.)`,
+                                icon: '🔔',
+                                requireInteraction: true
+                            });
+                        }
+                        
+                        // Удаляем выполненное напоминание
+                        delete reminders[itemId];
+                        saveReminders();
+                        applyFilters();
+                    }
+                }
+            });
+        }
+
+        function startReminderCheck() {
+            // Проверяем напоминания каждые 30 секунд
+            reminderCheckInterval = setInterval(checkReminders, 30000);
+            // И сразу один раз при загрузке
+            checkReminders();
+        }
+
+        function getReminderBadge(itemId) {
+            if (reminders[itemId]) {
+                const reminderTime = new Date(reminders[itemId].time);
+                const timeStr = reminderTime.toLocaleString('ru-RU', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                return `<span class="reminder-badge" title="Напоминание установлено">🔔 ${timeStr}</span>`;
+            }
+            return '';
+        }
+
+        function filterByCategory(category) {
+            currentFilter = category;
+            
+            // Обновляем активную кнопку фильтра
+            document.querySelectorAll('.filter-btn[data-category]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            applyFilters();
+        }
+
+        function sortBy(sortType) {
+            currentSort = sortType;
+            
+            // Обновляем активную кнопку сортировки
+            document.querySelectorAll('.filter-btn[data-sort]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            applyFilters();
+        }
+
+        function applySorting(list) {
+            let sortedList = [...list]; // Копируем массив
+
+            switch(currentSort) {
+                case 'name-asc':
+                    // По имени А→Я
+                    sortedList.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+                    break;
+                
+                case 'name-desc':
+                    // По имени Я→А
+                    sortedList.sort((a, b) => b.name.localeCompare(a.name, 'ru'));
+                    break;
+                
+                case 'quantity-asc':
+                    // По количеству (возрастание)
+                    sortedList.sort((a, b) => a.quantity - b.quantity);
+                    break;
+                
+                case 'quantity-desc':
+                    // По количеству (убывание)
+                    sortedList.sort((a, b) => b.quantity - a.quantity);
+                    break;
+                
+                case 'category':
+                    // По категории, потом по имени
+                    sortedList.sort((a, b) => {
+                        if (a.category === b.category) {
+                            return a.name.localeCompare(b.name, 'ru');
+                        }
+                        return a.category.localeCompare(b.category, 'ru');
+                    });
+                    break;
+                
+                case 'default':
+                default:
+                    // По умолчанию (как добавлено) - по ID
+                    sortedList.sort((a, b) => a.id - b.id);
+                    break;
+            }
+
+            return sortedList;
+        }
+
+        function applyFilters() {
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            let filteredList = shoppingList;
+
+            // Фильтр по категории
+            if (currentFilter !== 'Все') {
+                filteredList = filteredList.filter(item => item.category === currentFilter);
+            }
+
+            // Фильтр по поиску
+            if (searchQuery) {
+                filteredList = filteredList.filter(item => 
+                    item.name.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            // Применяем сортировку
+            filteredList = applySorting(filteredList);
+
+            renderList(filteredList, searchQuery);
+            
+            // Показываем информацию о результатах
+            const resultsInfo = document.getElementById('searchResults');
+            if (searchQuery || currentFilter !== 'Все') {
+                const total = shoppingList.length;
+                const found = filteredList.length;
+                let sortText = '';
+                
+                switch(currentSort) {
+                    case 'name-asc': sortText = ', сортировка: по имени (А→Я)'; break;
+                    case 'name-desc': sortText = ', сортировка: по имени (Я→А)'; break;
+                    case 'quantity-asc': sortText = ', сортировка: по количеству ↑'; break;
+                    case 'quantity-desc': sortText = ', сортировка: по количеству ↓'; break;
+                    case 'category': sortText = ', сортировка: по категории'; break;
+                }
+                
+                resultsInfo.style.display = 'block';
+                resultsInfo.textContent = `Найдено: ${found} из ${total} товаров${sortText}`;
+            } else if (currentSort !== 'default') {
+                resultsInfo.style.display = 'block';
+                let sortText = '';
+                switch(currentSort) {
+                    case 'name-asc': sortText = 'По имени (А→Я)'; break;
+                    case 'name-desc': sortText = 'По имени (Я→А)'; break;
+                    case 'quantity-asc': sortText = 'По количеству ↑'; break;
+                    case 'quantity-desc': sortText = 'По количеству ↓'; break;
+                    case 'category': sortText = 'По категории'; break;
+                }
+                resultsInfo.textContent = `Сортировка: ${sortText}`;
+            } else {
+                resultsInfo.style.display = 'none';
+            }
+        }
+
+        function highlightText(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<mark style="background: #ffeb3b; padding: 2px 4px; border-radius: 3px;">$1</mark>');
+        }
+
+        function renderList(filteredList = shoppingList, searchQuery = '') {
+            const container = document.getElementById('listContainer');
+            
+            if (filteredList.length === 0) {
+                if (shoppingList.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🛍️</div>
+                            <h3>Список пуст</h3>
+                            <p>Добавьте свой первый товар!</p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔍</div>
+                            <h3>Ничего не найдено</h3>
+                            <p>Попробуйте изменить параметры поиска</p>
+                        </div>
+                    `;
+                }
+            } else {
+                container.innerHTML = filteredList.map(item => {
+                    const highlightedName = highlightText(item.name, searchQuery);
+                    const reminderBadge = getReminderBadge(item.id);
+                    const hasReminder = reminders[item.id];
+                    
+                    return `
+                        <div class="list-item ${searchQuery ? 'highlight' : ''}" data-item-id="${item.id}">
+                            <div class="item-info">
+                                <div class="item-name">
+                                    ${highlightedName}
+                                    ${reminderBadge}
+                                </div>
+                                <div class="item-details">
+                                    <div class="item-quantity">
+                                        📦 ${item.quantity} шт.
+                                    </div>
+                                    <span class="item-category">${item.category}</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                ${hasReminder 
+                                    ? `<button class="btn-cancel-reminder btn-small" onclick="cancelReminder(${item.id})">🔕 Отменить</button>`
+                                    : `<button class="btn-reminder btn-small" onclick="setReminder(${item.id})">🔔 Напомнить</button>`
+                                }
+                                <button class="btn-edit" onclick="startEdit(${item.id})">✏️ Изменить</button>
+                                <button class="btn-danger" onclick="deleteProduct(${item.id})">🗑️ Удалить</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            updateStats();
+            showPriceCalculator();
+        }
+
+        function updateStats() {
+            const totalItems = shoppingList.length;
+            const totalQuantity = shoppingList.reduce((sum, item) => sum + item.quantity, 0);
+
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('totalQuantity').textContent = totalQuantity;
+
+            // Показываем/скрываем секцию экспорта
+            const exportSection = document.getElementById('exportSection');
+            if (totalItems > 0) {
+                exportSection.style.display = 'block';
+            } else {
+                exportSection.style.display = 'none';
+            }
+        }
+
+        // ========== ФУНКЦИИ ЭКСПОРТА ==========
+
+        function importFromJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Проверяем формат данных
+                    if (data.items && Array.isArray(data.items)) {
+                        if (confirm(`📥 Импортировать ${data.items.length} товаров? Текущий список будет заменён.`)) {
+                            shoppingList = data.items;
+                            saveToStorage();
+                            renderList();
+                            alert('✅ Импорт завершён!');
+                        }
+                    } else {
+                        alert('❌ Неверный формат файла!');
+                    }
+                } catch (error) {
+                    alert('❌ Ошибка чтения файла: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            
+            // Сбрасываем input для повторного импорта
+            event.target.value = '';
+        }
+
+        function exportAsText() {
+            if (shoppingList.length === 0) {
+                alert('⚠️ Список пуст!');
+                return;
+            }
+
+            const currentDate = new Date().toLocaleDateString('ru-RU');
+            let text = `📋 СПИСОК ПОКУПОК\n`;
+            text += `Дата: ${currentDate}\n`;
+            text += `${'='.repeat(50)}\n\n`;
+
+            // Группируем по категориям
+            const categories = {};
+            shoppingList.forEach(item => {
+                if (!categories[item.category]) {
+                    categories[item.category] = [];
+                }
+                categories[item.category].push(item);
+            });
+
+            // Формируем текст по категориям
+            Object.keys(categories).forEach(category => {
+                text += `\n🏷️ ${category.toUpperCase()}\n`;
+                text += `${'-'.repeat(50)}\n`;
+                categories[category].forEach((item, index) => {
+                    text += `${index + 1}. ${item.name} — ${item.quantity} шт.\n`;
+                });
+            });
+
+            // Итоги
+            const totalItems = shoppingList.length;
+            const totalQuantity = shoppingList.reduce((sum, item) => sum + item.quantity, 0);
+            text += `\n${'='.repeat(50)}\n`;
+            text += `ИТОГО: ${totalItems} товаров, ${totalQuantity} единиц\n`;
+
+            // Скачивание файла
+            downloadFile(text, `список_покупок_${getCurrentDateString()}.txt`, 'text/plain');
+        }
+
+        function exportAsJSON() {
+            if (shoppingList.length === 0) {
+                alert('⚠️ Список пуст!');
+                return;
+            }
+
+            const data = {
+                created: new Date().toISOString(),
+                totalItems: shoppingList.length,
+                totalQuantity: shoppingList.reduce((sum, item) => sum + item.quantity, 0),
+                items: shoppingList
+            };
+
+            const json = JSON.stringify(data, null, 2);
+            downloadFile(json, `список_покупок_${getCurrentDateString()}.json`, 'application/json');
+        }
+
+        function copyToClipboard() {
+            if (shoppingList.length === 0) {
+                alert('⚠️ Список пуст!');
+                return;
+            }
+
+            let text = '📋 СПИСОК ПОКУПОК\n\n';
+            
+            shoppingList.forEach((item, index) => {
+                text += `${index + 1}. ${item.name} (${item.category}) — ${item.quantity} шт.\n`;
+            });
+
+            text += `\nВсего: ${shoppingList.length} товаров`;
+
+            // Копируем в буфер обмена
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Список скопирован в буфер обмена!');
+            }).catch(err => {
+                alert('❌ Ошибка копирования: ' + err);
+            });
+        }
+
+        function printList() {
+            if (shoppingList.length === 0) {
+                alert('⚠️ Список пуст!');
+                return;
+            }
+
+            const printWindow = window.open('', '_blank');
+            const currentDate = new Date().toLocaleDateString('ru-RU');
+            
+            let html = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Список покупок</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            padding: 20px;
+                            max-width: 800px;
+                            margin: 0 auto;
+                        }
+                        h1 {
+                            text-align: center;
+                            color: #2c3e50;
+                            border-bottom: 3px solid #667eea;
+                            padding-bottom: 10px;
+                        }
+                        .date {
+                            text-align: center;
+                            color: #7f8c8d;
+                            margin-bottom: 30px;
+                        }
+                        .category {
+                            margin-top: 30px;
+                            background: #f8f9fa;
+                            padding: 15px;
+                            border-left: 5px solid #667eea;
+                        }
+                        .category h2 {
+                            margin: 0 0 15px 0;
+                            color: #667eea;
+                        }
+                        .item {
+                            padding: 8px 0;
+                            border-bottom: 1px solid #e0e0e0;
+                            display: flex;
+                            justify-content: space-between;
+                        }
+                        .item:last-child {
+                            border-bottom: none;
+                        }
+                        .summary {
+                            margin-top: 30px;
+                            padding: 20px;
+                            background: #667eea;
+                            color: white;
+                            text-align: center;
+                            border-radius: 10px;
+                        }
+                        @media print {
+                            .no-print { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>📋 Список покупок</h1>
+                    <div class="date">Дата: ${currentDate}</div>
+            `;
+
+            // Группируем по категориям
+            const categories = {};
+            shoppingList.forEach(item => {
+                if (!categories[item.category]) {
+                    categories[item.category] = [];
+                }
+                categories[item.category].push(item);
+            });
+
+            // Добавляем товары по категориям
+            Object.keys(categories).forEach(category => {
+                html += `<div class="category">`;
+                html += `<h2>${category}</h2>`;
+                categories[category].forEach((item, index) => {
+                    html += `
+                        <div class="item">
+                            <span>${index + 1}. ${item.name}</span>
+                            <span><strong>${item.quantity} шт.</strong></span>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            });
+
+            // Итоги
+            const totalItems = shoppingList.length;
+            const totalQuantity = shoppingList.reduce((sum, item) => sum + item.quantity, 0);
+            html += `
+                <div class="summary">
+                    <h2>Итого</h2>
+                    <p><strong>${totalItems}</strong> товаров, <strong>${totalQuantity}</strong> единиц</p>
+                </div>
+                <div class="no-print" style="margin-top: 20px; text-align: center;">
+                    <button onclick="window.print()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+                        🖨️ Печать
+                    </button>
+                    <button onclick="window.close()" style="padding: 10px 20px; font-size: 16px; cursor: pointer; margin-left: 10px;">
+                        ✖️ Закрыть
+                    </button>
+                </div>
+            </body>
+            </html>
+            `;
+
+            printWindow.document.write(html);
+            printWindow.document.close();
+        }
+
+        // Вспомогательные функции
+        function downloadFile(content, filename, contentType) {
+            const blob = new Blob([content], { type: contentType });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            alert(`✅ Файл "${filename}" загружен!`);
+        }
+
+        function getCurrentDateString() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function showPriceCalculator() {
+            const calculator = document.getElementById('priceCalculator');
+            
+            if (shoppingList.length === 0) {
+                calculator.style.display = 'none';
+                return;
+            }
+
+            calculator.style.display = 'block';
+            calculator.innerHTML = `
+                <h2 style="margin: 20px 0 15px 0; color: #2c3e50;">💰 Калькулятор стоимости</h2>
+                <div class="price-input">
+                    ${shoppingList.map(item => `
+                        <div class="price-item">
+                            <label>${item.name} (${item.quantity} шт.):</label>
+                            <input type="number" id="price-${item.id}" placeholder="Цена за шт." min="0" step="0.01" oninput="calculateTotal()" />
+                            <span>руб.</span>
+                        </div>
+                    `).join('')}
+                    <div class="total-price" id="totalPrice">Введите цены для подсчёта</div>
+                </div>
+            `;
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            let allFilled = true;
+
+            shoppingList.forEach(item => {
+                const priceInput = document.getElementById(`price-${item.id}`);
+                const price = parseFloat(priceInput.value);
+                
+                if (price > 0) {
+                    total += price * item.quantity;
+                } else {
+                    allFilled = false;
+                }
+            });
+
+            const totalPriceDiv = document.getElementById('totalPrice');
+            if (allFilled && total > 0) {
+                totalPriceDiv.textContent = `💵 Общая стоимость: ${total.toFixed(2)} руб.`;
+            } else {
+                totalPriceDiv.textContent = 'Введите цены для подсчёта';
+            }
+        }
+
+        // Обработка Enter
+        document.getElementById('productName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('productQuantity').focus();
+            }
+        });
+
+        document.getElementById('productQuantity').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addProduct();
+            }
+        });
+
+        // Инициализация
+        window.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            updateThemeIcons();
+            renderList();
+            
+            // Показываем PWA инфо, если не установлено
+            if (!isInstalled) {
+                setTimeout(() => {
+                    document.getElementById('pwaInfo').classList.add('show');
+                }, 1000);
+            }
+            
+            // Проверяем поддержку уведомлений
+            const permission = checkNotificationPermission();
+            if (permission === 'default' || permission === 'denied') {
+                const permissionBlock = document.getElementById('notificationPermission');
+                if (permission === 'default') {
+                    permissionBlock.style.display = 'flex';
+                }
+            }
+            
+            // Запускаем проверку напоминаний
+            startReminderCheck();
+            
+            if (shoppingList.length > 0) {
+                console.log('👋 Добро пожаловать обратно! Загружено товаров:', shoppingList.length);
+            } else {
+                console.log('👋 Добро пожаловать! Создайте свой первый список покупок.');
+            }
+        });
+    </script>
+</body>
+</html>
