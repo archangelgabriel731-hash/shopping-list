@@ -1,0 +1,12 @@
+{
+  "background_color": "#ffffff",
+  "description": "Удобный менеджер списка покупок с напоминаниями",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Список покупок",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Список покупок",
+  "start_url": "/",
+  "theme_color": "#667eea"
+}
